@@ -1,0 +1,22 @@
+{
+  "name": "crud-firebase-mvc-websdk",
+  "version": "1.0.0",
+  "description": "Exemplo CRUD Firebase MVC com Express, EJS e Firebase Realtime Database",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "firebase": "^11.10.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
