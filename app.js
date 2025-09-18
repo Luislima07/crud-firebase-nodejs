@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import categoriaRoutes from "./routes/categoriaRoutes.js";
 import cursosRoutes from "./routes/cursosRoutes.js";
 import alunosRoutes from "./routes/alunosRoutes.js";
+import integrantesRoutes from "./routes/intregrantesRoutes.js";
 
 // -------------------- CONFIGURAÇÕES BÁSICAS --------------------
 dotenv.config();
@@ -37,6 +38,8 @@ app.use("/categorias", categoriaRoutes);
 app.use("/cursos", cursosRoutes);
 
 app.use("/alunos", alunosRoutes);
+
+app.use("/integrantes", integrantesRoutes);
 
 app.get("/", (req, res) => {
   res.render("home", { title: "Página Inicial" });
