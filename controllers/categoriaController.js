@@ -1,4 +1,5 @@
 // Importa a instância do Realtime Database já inicializada (config/firebase.js)
+import { table } from "console";
 import { db } from "../config/firebase.js";
 
 // Importa funções do Web SDK do Realtime Database usadas no CRUD
@@ -11,11 +12,18 @@ const rootRef = ref(db, "categorias");
 export default {
   // [READ] Lista todas as categorias
   async list(req, res) {
-    res.render("categorias/list", {
-      title: "Lista de Categorias",
-    });
+    try {
+      const listar_tabela = await get(rootRef) //pegando informações da tabela categorias
+      const categorias = listar_tabela.exists() ? listar_tabela.val() : {};
+      res.render("categorias/list", {
+        title: "Lista de Categorias",
+        categorias
+      });
+    }catch (e){
+      console.log(`Erro ao listar os items do Banco de Dados ${e}`);
+      res.status(500).send('Erro no listar');
+    }
   },
-
   // [CREATE - FORM] Mostra o formulário de criação (sem acessar o DB)
   createForm(req, res) {
     // Apenas renderiza a página de criação
@@ -45,5 +53,7 @@ export default {
   async remove(req, res) {
     const id = req.params.id; 
     
-  }
+  },
+
+
 };
