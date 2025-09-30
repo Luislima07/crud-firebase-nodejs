@@ -11,9 +11,17 @@ const rootRef = ref(db, "cursos");
 export default {
   // [READ] Lista todas as categorias
   async list(req, res) {
-    res.render("cursos/list", {
-      title: "Lista de Cursos",
-    });
+    try {
+       const listar_tabela = await get(rootRef) //pegando informações da tabela cursos
+       const cursos = listar_tabela.exists() ? listar_tabela.val() : {};
+      res.render("cursos/list", {
+        title: "Lista de Cursos",
+        cursos
+      });
+    } catch (e) {
+      console.log(`Erro ao listar os items do Banco de Dados ${e}`);
+      res.status(500).send('Erro no listar');
+    }
   },
 
   // [CREATE - FORM] Mostra o formulário de criação (sem acessar o DB)

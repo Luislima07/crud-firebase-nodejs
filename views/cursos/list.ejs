@@ -18,7 +18,23 @@
         </tr>
       </thead>
       <tbody>
-        
+         <% if(Object.keys(cursos).lenght == 0 ){ %>
+            <tr>
+              <td colspan="2" class="text-center text-muted py-4">
+                  <h1>Nenhum registro</h1>      
+              </td>
+            </tr> 
+          <% } %>
+          <% for(let id in cursos ) { %>
+            <tr>
+              <td>
+                <%= cursos[id].nome %>
+              </td>
+              <td class="text-end">
+                <!--link excluir e editar-->
+              </td>
+            </tr>
+            <% } %>
       </tbody>
     </table>
   </div>

@@ -1,34 +1,33 @@
 // Importa a instância do Realtime Database já inicializada (config/firebase.js)
+import { table } from "console";
 import { db } from "../config/firebase.js";
 
 // Importa funções do Web SDK do Realtime Database usadas no CRUD
 import { ref, get, push, set, child, update, remove } from "firebase/database";
 
-// Cria uma referência "raiz" para o nó/coleção "categorias" no banco
-const rootRef = ref(db, "alunos");
+// Cria uma referência "raiz" para o nó/coleção "professores" no banco
+const rootRef = ref(db, "professores");
 
 // Exporta o controller como módulo ES (usado nas rotas)
 export default {
-  // [READ] Lista todas as categorias
+  // [READ] Lista todas as professores
   async list(req, res) {
     try {
-       const listar_tabela = await get(rootRef) //pegando informações da tabela alunos
-            const alunos = listar_tabela.exists() ? listar_tabela.val() : {};
-      res.render("alunos/list", {
-        title: "Lista de Alunos",
-        alunos
+      const listar_tabela = await get(rootRef) //pegando informações da tabela professores
+      const professores = listar_tabela.exists() ? listar_tabela.val() : {};
+      res.render("professores/list", {
+        title: "Lista de professores",
+        professores
       });
-      
-    } catch (e) {
+    }catch (e){
       console.log(`Erro ao listar os items do Banco de Dados ${e}`);
       res.status(500).send('Erro no listar');
     }
   },
-
   // [CREATE - FORM] Mostra o formulário de criação (sem acessar o DB)
   createForm(req, res) {
     // Apenas renderiza a página de criação
-    res.render("alunos/create", { title: "Novo Aluno" });
+    res.render("professores/create", { title: "Nova Categoria" });
   },
 
   // [CREATE - ACTION] Cria uma categoria nova
@@ -37,38 +36,22 @@ export default {
       const { nome, descricao } = req.body;
       const novo_registro = push(rootRef); 
       await set(novo_registro, { nome, descricao });
-      res.redirect("/alunos");  
+      res.redirect("/professores");  
     }catch (error) {
-      console.error("Erro ao criar Aluno", error);
-      res.status(500).send("Erro ao criar Aluno");
+      console.error("Erro ao criar categoria:", error);
+      res.status(500).send("Erro ao criar categoria");
     }
 
 
   },
 
-
-
-
   // [UPDATE - FORM] Carrega dados para edição de uma categoria específica
   
   // [UPDATE - ACTION] Salva a edição de uma categoria
-    async update(req, res) {
-        const id = req.params.id;
-        const { nome, descricao } = req.body;
-        const data = { nome, descricao };
-        try {
-            const update = updateDataUser(id, data);
-            update.then(response => {
-                res.redirect("/alunos");
-            })
-        } catch (error) {
-            console.error("Erro ao atualizar aluno:", error);
-            res.status(500).send("Erro ao atualizar aluno");
-        }
-  },
+  
   // [DELETE] Remove uma categoria pelo id
   async remove(req, res) {
     const id = req.params.id; 
     
-  }
+  },
 };

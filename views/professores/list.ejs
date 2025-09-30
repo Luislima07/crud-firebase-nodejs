@@ -1,14 +1,14 @@
 <!-- Cabeçalho da página: título à esquerda + botão "Nova Categoria" à direita -->
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 mb-0">Alunos</h1>
+  <h1 class="h4 mb-0">professores</h1>
   <!-- Link para o formulário de criação -->
-  <a href="/alunos/create" class="btn btn-primary">Novo Alunos</a>
+  <a href="/professores/create" class="btn btn-primary">Novo professor</a>
 </div>
 
 <!-- Card Bootstrap para dar um visual "caixa" -->
 <div class="card shadow-sm">
   <div class="card-body p-0">
-    <!-- Tabela responsiva para exibir as categorias -->
+    <!-- Tabela responsiva para exibir as professores -->
     <table class="table table-hover align-middle mb-0">
       <!-- Cabeçalho da tabela -->
       <thead class="table-light">
@@ -18,17 +18,17 @@
         </tr>
       </thead>
       <tbody>
-         <% if(Object.keys(alunos).lenght == 0 ){ %>
+          <% if(Object.keys(professores).lenght == 0 ){ %>
             <tr>
               <td colspan="2" class="text-center text-muted py-4">
                   <h1>Nenhum registro</h1>      
               </td>
             </tr> 
           <% } %>
-          <% for(let id in alunos ) { %>
+          <% for(let id in professores ) { %>
             <tr>
               <td>
-                <%= alunos[id].nome %>
+                <%= professores[id].nome %>
               </td>
               <td class="text-end">
                 <!--link excluir e editar-->
