@@ -42,33 +42,55 @@ export default {
       console.error("Erro ao criar Aluno", error);
       res.status(500).send("Erro ao criar Aluno");
     }
-
-
   },
 
 
 
 
   // [UPDATE - FORM] Carrega dados para edição de uma categoria específica
-  
+   async editForm(req, res) {
+    try {
+      // Captura o id da rota (ex.: /categorias/:id/edit)
+      const { id } = req.params;
+      // Monta ref para o filho: categorias/{id}
+      const snap = await get(child(rootRef, id));
+      // Se não existir, retorna 404
+      if (!snap.exists())
+        return res.status(404).send("Aluno não encontrado");
+      // Renderiza o form de edição com os dados atuais
+      res.render("alunos/edit", {
+        title: "Editar Aluno",
+        id,
+        alunos  : snap.val(),
+      });
+    } catch (e) {
+      console.error("Erro editForm categoria:", e);
+      res.status(500).send("Erro ao abrir edição");
+    }
+  },
   // [UPDATE - ACTION] Salva a edição de uma categoria
     async update(req, res) {
-        const id = req.params.id;
-        const { nome, descricao } = req.body;
-        const data = { nome, descricao };
-        try {
-            const update = updateDataUser(id, data);
-            update.then(response => {
-                res.redirect("/alunos");
-            })
+      try {
+        const { id } = req.params;
+        const { nome } = req.body
+        const { descricao } = req.body
+        await update(child(rootRef, id), { nome, descricao });
+        res.redirect("/alunos");
         } catch (error) {
             console.error("Erro ao atualizar aluno:", error);
             res.status(500).send("Erro ao atualizar aluno");
         }
   },
   // [DELETE] Remove uma categoria pelo id
-  async remove(req, res) {
-    const id = req.params.id; 
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+      await remove(child(rootRef, id));
+      res.redirect("/alunos")
+    } catch (e) {
+      console.error('Erro ao deletar aluno: ', e);
+      res.status(500).send('Erro ao excluir aluno');
+    }
     
   }
 };

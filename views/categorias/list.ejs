@@ -14,27 +14,41 @@
       <thead class="table-light">
         <tr>
           <th>Nome</th>
+          <th>Descrição</th>
           <th class="text-end">Ações</th>
         </tr>
       </thead>
       <tbody>
-          <% if(Object.keys(categorias).lenght == 0 ){ %>
-            <tr>
-              <td colspan="2" class="text-center text-muted py-4">
-                  <h1>Nenhum registro</h1>      
-              </td>
-            </tr> 
+        <% if (Object.keys(categorias).length===0) { %>
+          <tr>
+            <td colspan="2" class="text-center text-muted py-4">
+              Nenhum registro encontrado.
+            </td>
+          </tr>
           <% } %>
-          <% for(let id in categorias ) { %>
-            <tr>
-              <td>
-                <%= categorias[id].nome %>
-              </td>
-              <td class="text-end">
-                <!--link excluir e editar-->
-              </td>
-            </tr>
-            <% } %>
+
+            <% for (let id in categorias) { %>
+              <tr>
+                <td>
+                  <%= categorias[id].nome %>
+                </td>
+                <td>
+                  <%= categorias[id].descricao %>
+                </td>
+                <td class="text-end">
+                  <!--link do excluir e do editar-->
+                  <!-- Link para editar (passa o id na URL) -->
+                  <a class="btn btn-sm btn-outline-warning" href="/categorias/<%= id %>/edit">
+                    Editar
+                  </a>
+                  <!-- Link para excluir (passa o id na URL) -->
+                  <a class="btn btn-sm btn-outline-danger" href="/categorias/<%= id %>/delete"
+                    onclick="return confirm('Excluir esta categoria?')">
+                    Excluir
+                  </a>
+                </td>
+              </tr>
+              <% } %>
       </tbody>
     </table>
   </div>

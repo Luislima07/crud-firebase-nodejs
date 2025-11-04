@@ -4,6 +4,7 @@ import { db } from "../config/firebase.js";
 
 // Importa funções do Web SDK do Realtime Database usadas no CRUD
 import { ref, get, push, set, child, update, remove } from "firebase/database";
+import { chdir } from "process";
 
 // Cria uma referência "raiz" para o nó/coleção "categorias" no banco
 const rootRef = ref(db, "categorias");
@@ -46,12 +47,51 @@ export default {
   },
 
   // [UPDATE - FORM] Carrega dados para edição de uma categoria específica
-  
+  async editForm(req, res) {
+    try {
+      // Captura o id da rota (ex.: /categorias/:id/edit)
+      const { id } = req.params;
+      // Monta ref para o filho: categorias/{id}
+      const snap = await get(child(rootRef, id));
+      // Se não existir, retorna 404
+      if (!snap.exists())
+        return res.status(404).send("Categoria não encontrada");
+      // Renderiza o form de edição com os dados atuais
+      res.render("categorias/edit", {
+        title: "Editar Categoria",
+        id,
+        categoria: snap.val(),
+      });
+    } catch (e) {
+      console.error("Erro editForm categoria:", e);
+      res.status(500).send("Erro ao abrir edição");
+    }
+  },
   // [UPDATE - ACTION] Salva a edição de uma categoria
-  
+  async update(req, res) {
+   try {
+      // Pega o id da URL e o novo nome do body
+      const { id } = req.params;
+      const { nome } = req.body;
+      const { descricao } = req.body;
+      // Atualiza apenas os campos enviados no caminho categorias/{id}
+      await update(child(rootRef, id), { nome, descricao });
+      // Volta para a listagem
+      res.redirect("/categorias");
+    } catch (e) {
+      console.error("Erro update categoria:", e);
+      res.status(500).send("Erro ao atualizar categoria");
+    }
+  },
   // [DELETE] Remove uma categoria pelo id
-  async remove(req, res) {
-    const id = req.params.id; 
+  async delete(req, res) {
+   try {
+    const { id } = req.params;
+    await remove(chdir(rootRef, id));      
+   } catch (e) {
+    console.error('Erro ao deletar categoria: ', e);
+      res.status(500).send('Erro ao excluir categoria');
+   }
     
   },
 
