@@ -1,0 +1,20 @@
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h1 class="h4 mb-3">Editar Aliuno</h1>
+        <form method="POST" action="/cursos/<%= id %>/edit" class="row g-3">
+            <div class="form-group col-md-8">
+                <label class="form-label">Nome</label>
+                <input type="text" name="nome" value="<%= cursos.nome %>" class="form-control" required>
+            </div>
+            <div class="form-group mt-2">
+                <label class="form-label">Descrição</label>
+                <input type="text" name="descricao" value="<%= cursos.descricao %>" class="form-control" required>
+            </div>
+
+            <div class="col-12">
+                <a href="/cursos" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>

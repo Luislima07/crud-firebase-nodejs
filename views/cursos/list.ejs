@@ -31,7 +31,8 @@
                 <%= cursos[id].nome %>
               </td>
               <td class="text-end">
-                <!--link excluir e editar-->
+                <a href="/cursos/<%= id %>/edit" class="btn btn-sm btn-outline-warning">Editar</a>
+                <a href="/cursos/<%= id %>/delete"  onclick="return confirm('Excluir o <%= cursos[id].nome %>')" class="btn btn-sm btn-outline-danger">Deletar</a>
               </td>
             </tr>
             <% } %>

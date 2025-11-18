@@ -6,5 +6,8 @@ const router = Router();
 router.get("/", cursosController.list);
 router.get("/create", cursosController.createForm);
 router.post("/create", cursosController.create);
+router.get("/:id/edit", cursosController.editForm);
+router.post("/:id/edit", cursosController.update);
+router.get("/:id/delete", cursosController.delete);
 
 export default router;

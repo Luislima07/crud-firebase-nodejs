@@ -14,6 +14,7 @@
       <thead class="table-light">
         <tr>
           <th>Nome</th>
+          <th>Descrição</th>
           <th class="text-end">Ações</th>
         </tr>
       </thead>
@@ -30,8 +31,12 @@
               <td>
                 <%= professores[id].nome %>
               </td>
+              <td>
+                <%= professores[id].descricao %>
+              </td>
               <td class="text-end">
-                <!--link excluir e editar-->
+                <a href="/professores/<%= id %>/edit" class="btn btn-sm btn-outline-warning">Editar</a>
+                <a href="/professores/<%= id %>/delete"  onclick="return confirm('Excluir o <%= professores[id].nome %>')" class="btn btn-sm btn-outline-danger">Deletar</a>
               </td>
             </tr>
             <% } %>

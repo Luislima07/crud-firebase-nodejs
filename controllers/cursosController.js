@@ -12,8 +12,8 @@ export default {
   // [READ] Lista todas as categorias
   async list(req, res) {
     try {
-       const listar_tabela = await get(rootRef) //pegando informações da tabela cursos
-       const cursos = listar_tabela.exists() ? listar_tabela.val() : {};
+      const listar_tabela = await get(rootRef) //pegando informações da tabela cursos
+      const cursos = listar_tabela.exists() ? listar_tabela.val() : {};
       res.render("cursos/list", {
         title: "Lista de Cursos",
         cursos
@@ -34,10 +34,10 @@ export default {
   async create(req, res) {
     try {
       const { nome, descricao } = req.body;
-      const novo_registro = push(rootRef); 
+      const novo_registro = push(rootRef);
       await set(novo_registro, { nome, descricao });
-      res.redirect("/cursos");  
-    }catch (error) {
+      res.redirect("/cursos");
+    } catch (error) {
       console.error("Erro ao criar Curso:", error);
       res.status(500).send("Erro ao criar Curso");
     }
@@ -49,25 +49,45 @@ export default {
 
 
   // [UPDATE - FORM] Carrega dados para edição de uma categoria específica
-  
+  async editForm(req, res) {
+    try {
+      const { id } = req.params;
+      const snap = await get(child(rootRef, id));
+      if (!snap.exists())
+        return res.status(404).send("Curso não encontrado!");
+      res.render("cursos/edit",
+        {
+          title: "Editar Curso",
+          id,
+          cursos: snap.val(),
+        });
+    } catch (e) {
+      console.error("Erro editForm categoria:", e);
+      res.status(500).send("Erro ao abrir edição");
+    }
+  },
   // [UPDATE - ACTION] Salva a edição de uma categoria
     async update(req, res) {
-        const id = req.params.id;
-        const { nome, descricao } = req.body;
-        const data = { nome, descricao };
-        try {
-            const update = updateDataUser(id, data);
-            update.then(response => {
-                res.redirect("/cursos");
-            })
+      try {
+          const id = req.params.id;
+          const { nome } = req.body;
+          const { descricao } = req.body;
+          await update(child(rootRef, id), { nome, descricao });
+          res.redirect("/cursos");
         } catch (error) {
             console.error("Erro ao atualizar curso:", error);
             res.status(500).send("Erro ao atualizar curso");
         }
   },
   // [DELETE] Remove uma categoria pelo id
-  async remove(req, res) {
-    const id = req.params.id; 
-    
+  async delete(req, res) {
+    try {
+        const { id } = req.params;
+        await remove(child(rootRef, id));
+        res.redirect("/cursos")
+      } catch (e) {
+        console.error('Erro ao deletar cursos: ', e);
+        res.status(500).send('Erro ao excluir curso');
+      }
   }
 };

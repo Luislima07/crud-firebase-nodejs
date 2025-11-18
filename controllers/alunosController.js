@@ -12,16 +12,15 @@ export default {
   // [READ] Lista todas as categorias
   async list(req, res) {
     try {
-       const listar_tabela = await get(rootRef) //pegando informações da tabela alunos
-            const alunos = listar_tabela.exists() ? listar_tabela.val() : {};
+      const listar_tabela = await get(rootRef); //pegando informações da tabela alunos
+      const alunos = listar_tabela.exists() ? listar_tabela.val() : {};
       res.render("alunos/list", {
         title: "Lista de Alunos",
-        alunos
+        alunos,
       });
-      
     } catch (e) {
       console.log(`Erro ao listar os items do Banco de Dados ${e}`);
-      res.status(500).send('Erro no listar');
+      res.status(500).send("Erro no listar");
     }
   },
 
@@ -35,62 +34,57 @@ export default {
   async create(req, res) {
     try {
       const { nome, descricao } = req.body;
-      const novo_registro = push(rootRef); 
+      const novo_registro = push(rootRef);
       await set(novo_registro, { nome, descricao });
-      res.redirect("/alunos");  
-    }catch (error) {
+      res.redirect("/alunos");
+    } catch (error) {
       console.error("Erro ao criar Aluno", error);
       res.status(500).send("Erro ao criar Aluno");
     }
   },
 
-
-
-
   // [UPDATE - FORM] Carrega dados para edição de uma categoria específica
-   async editForm(req, res) {
+  async editForm(req, res) {
     try {
       // Captura o id da rota (ex.: /categorias/:id/edit)
       const { id } = req.params;
       // Monta ref para o filho: categorias/{id}
       const snap = await get(child(rootRef, id));
       // Se não existir, retorna 404
-      if (!snap.exists())
-        return res.status(404).send("Aluno não encontrado");
+      if (!snap.exists()) return res.status(404).send("Aluno não encontrado");
       // Renderiza o form de edição com os dados atuais
       res.render("alunos/edit", {
         title: "Editar Aluno",
         id,
-        alunos  : snap.val(),
+        alunos: snap.val(),
       });
     } catch (e) {
-      console.error("Erro editForm categoria:", e);
+      console.error("Erro editForm Aluno:", e);
       res.status(500).send("Erro ao abrir edição");
     }
   },
   // [UPDATE - ACTION] Salva a edição de uma categoria
-    async update(req, res) {
-      try {
-        const { id } = req.params;
-        const { nome } = req.body
-        const { descricao } = req.body
-        await update(child(rootRef, id), { nome, descricao });
-        res.redirect("/alunos");
-        } catch (error) {
-            console.error("Erro ao atualizar aluno:", error);
-            res.status(500).send("Erro ao atualizar aluno");
-        }
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const { nome } = req.body;
+      const { descricao } = req.body;
+      await update(child(rootRef, id), { nome, descricao });
+      res.redirect("/alunos");
+    } catch (error) {
+      console.error("Erro ao atualizar aluno:", error);
+      res.status(500).send("Erro ao atualizar aluno");
+    }
   },
   // [DELETE] Remove uma categoria pelo id
   async delete(req, res) {
     try {
       const { id } = req.params;
       await remove(child(rootRef, id));
-      res.redirect("/alunos")
+      res.redirect("/alunos");
     } catch (e) {
-      console.error('Erro ao deletar aluno: ', e);
-      res.status(500).send('Erro ao excluir aluno');
+      console.error("Erro ao deletar aluno: ", e);
+      res.status(500).send("Erro ao excluir aluno");
     }
-    
-  }
+  },
 };
