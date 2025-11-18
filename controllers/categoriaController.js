@@ -14,15 +14,15 @@ export default {
   // [READ] Lista todas as categorias
   async list(req, res) {
     try {
-      const listar_tabela = await get(rootRef) //pegando informações da tabela categorias
+      const listar_tabela = await get(rootRef); //pegando informações da tabela categorias
       const categorias = listar_tabela.exists() ? listar_tabela.val() : {};
       res.render("categorias/list", {
         title: "Lista de Categorias",
-        categorias
+        categorias,
       });
-    }catch (e){
+    } catch (e) {
       console.log(`Erro ao listar os items do Banco de Dados ${e}`);
-      res.status(500).send('Erro no listar');
+      res.status(500).send("Erro no listar");
     }
   },
   // [CREATE - FORM] Mostra o formulário de criação (sem acessar o DB)
@@ -35,15 +35,13 @@ export default {
   async create(req, res) {
     try {
       const { nome, descricao } = req.body;
-      const novo_registro = push(rootRef); 
+      const novo_registro = push(rootRef);
       await set(novo_registro, { nome, descricao });
-      res.redirect("/categorias");  
-    }catch (error) {
+      res.redirect("/categorias");
+    } catch (error) {
       console.error("Erro ao criar categoria:", error);
       res.status(500).send("Erro ao criar categoria");
     }
-
-
   },
 
   // [UPDATE - FORM] Carrega dados para edição de uma categoria específica
@@ -69,7 +67,7 @@ export default {
   },
   // [UPDATE - ACTION] Salva a edição de uma categoria
   async update(req, res) {
-   try {
+    try {
       // Pega o id da URL e o novo nome do body
       const { id } = req.params;
       const { nome } = req.body;
@@ -85,15 +83,13 @@ export default {
   },
   // [DELETE] Remove uma categoria pelo id
   async delete(req, res) {
-   try {
-    const { id } = req.params;
-    await remove(chdir(rootRef, id));      
-   } catch (e) {
-    console.error('Erro ao deletar categoria: ', e);
-      res.status(500).send('Erro ao excluir categoria');
-   }
-    
+    try {
+      const { id } = req.params;
+      await remove(child(rootRef, id));
+      res.redirect("/categorias")
+    } catch (e) {
+      console.error("Erro ao deletar categoria: ", e);
+      res.status(500).send("Erro ao excluir categoria");
+    }
   },
-
-
 };
